@@ -5,6 +5,8 @@ export default function BusinessProfile({
   setProfile,
   onSave,
   saved,
+  saving = false,
+  loading = false,
 }) {
   const update = (key, value) => {
     setProfile((old) => ({
@@ -149,17 +151,26 @@ export default function BusinessProfile({
           </span>
         </div>
 
-        <div className="form-actions">
-          <span>
-            {saved
-              ? "Saved for this browser session"
-              : "You can update these details anytime."}
-          </span>
+       
+<div className="form-actions">
+  <span>
+    {loading
+      ? "Loading your business profile..."
+      : saved
+      ? "Profile saved to your account."
+      : "You can update these details anytime."}
+  </span>
 
-          <button className="button primary" type="submit">
-            <Save size={16} /> Save profile
-          </button>
-        </div>
+  <button
+    className="button primary"
+    type="submit"
+    disabled={saving || loading}
+  >
+    <Save size={16} />
+    {saving ? "Saving..." : "Save profile"}
+  </button>
+</div>
+
       </form>
     </section>
   );
