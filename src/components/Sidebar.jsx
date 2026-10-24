@@ -1,3 +1,4 @@
+
 import {
   LayoutDashboard,
   Search,
@@ -6,6 +7,8 @@ import {
   BookOpen,
   ArrowRight,
   Sparkles,
+  UserRound,
+  ChevronRight,
 } from "lucide-react";
 
 const navItems = [
@@ -15,7 +18,21 @@ const navItems = [
   { label: "Bid checklist", Icon: ListChecks },
 ];
 
-export default function Sidebar({ page, onNavigate }) {
+export default function Sidebar({
+  page,
+  onNavigate,
+  user = {
+    name: "Govind Kumar",
+    role: "MSME Business Owner",
+  },
+}) {
+  const initials = user.name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join("");
+
   return (
     <aside className="sidebar">
       <div className="brand">
@@ -29,8 +46,8 @@ export default function Sidebar({ page, onNavigate }) {
       </div>
 
       <div className="workspace">
-        <div className="workspace-avatar">G</div>
-        <div>
+        <div className="workspace-avatar">{initials || "U"}</div>
+        <div className="workspace-copy">
           <b>My Workspace</b>
           <small>MSME workspace</small>
         </div>
@@ -42,9 +59,7 @@ export default function Sidebar({ page, onNavigate }) {
         {navItems.map(({ label, Icon }) => (
           <button
             key={label}
-            className={`nav-item ${
-              page === label ? "active" : ""
-            }`}
+            className={`nav-item ${page === label ? "active" : ""}`}
             onClick={() => onNavigate(label)}
           >
             <Icon size={18} />
@@ -56,9 +71,7 @@ export default function Sidebar({ page, onNavigate }) {
       <div className="nav-label resources-label">RESOURCES</div>
 
       <button
-        className={`nav-item ${
-          page === "How it works" ? "active" : ""
-        }`}
+        className={`nav-item ${page === "How it works" ? "active" : ""}`}
         onClick={() => onNavigate("How it works")}
       >
         <BookOpen size={18} />
@@ -77,13 +90,21 @@ export default function Sidebar({ page, onNavigate }) {
           </button>
         </div>
 
-        <div className="user-row">
-          <div className="user-avatar">GK</div>
-          <div>
-            <b>Govind Kumar</b>
-            <small>Demo workspace</small>
+        <button
+          type="button"
+          className="user-row"
+          onClick={() => onNavigate("Business profile")}
+          title="Open your business profile"
+        >
+          <div className="user-avatar">{initials || "U"}</div>
+
+          <div className="user-info">
+            <b>{user.name}</b>
+            <small>{user.role}</small>
           </div>
-        </div>
+
+          <ChevronRight className="profile-chevron" size={16} />
+        </button>
       </div>
     </aside>
   );
