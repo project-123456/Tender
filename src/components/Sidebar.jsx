@@ -7,7 +7,6 @@ import {
   BookOpen,
   ArrowRight,
   Sparkles,
-  UserRound,
   ChevronRight,
 } from "lucide-react";
 
@@ -21,13 +20,20 @@ const navItems = [
 export default function Sidebar({
   page,
   onNavigate,
-  user = {
-    name: "Govind Kumar",
-    role: "MSME Business Owner",
-  },
+  user = {},
 }) {
-  const initials = user.name
-    .split(" ")
+  const displayName =
+    user.name ||
+    user.business?.companyName ||
+    user.email ||
+    "Your account";
+
+  const businessName =
+    user.business?.companyName || "Business profile";
+
+  const initials = displayName
+    .trim()
+    .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
     .map((part) => part[0].toUpperCase())
@@ -45,19 +51,28 @@ export default function Sidebar({
         </div>
       </div>
 
-      <div className="workspace">
+      <button
+        type="button"
+        className="workspace"
+        onClick={() => onNavigate("Business profile")}
+        title="Open your workspace profile"
+      >
         <div className="workspace-avatar">{initials || "U"}</div>
+
         <div className="workspace-copy">
           <b>My Workspace</b>
-          <small>MSME workspace</small>
+          <small>{businessName}</small>
         </div>
-      </div>
+
+        <ChevronRight size={15} />
+      </button>
 
       <div className="nav-label">WORKSPACE</div>
 
       <nav>
         {navItems.map(({ label, Icon }) => (
           <button
+            type="button"
             key={label}
             className={`nav-item ${page === label ? "active" : ""}`}
             onClick={() => onNavigate(label)}
@@ -71,6 +86,7 @@ export default function Sidebar({
       <div className="nav-label resources-label">RESOURCES</div>
 
       <button
+        type="button"
         className={`nav-item ${page === "How it works" ? "active" : ""}`}
         onClick={() => onNavigate("How it works")}
       >
@@ -85,26 +101,30 @@ export default function Sidebar({
           <p>
             Review source evidence before deciding to bid.
           </p>
-          <button onClick={() => onNavigate("How it works")}>
+
+          <button
+            type="button"
+            onClick={() => onNavigate("How it works")}
+          >
             Explore guide <ArrowRight size={14} />
           </button>
         </div>
 
         <button
-          type="button"
-          className="user-row"
-          onClick={() => onNavigate("Business profile")}
-          title="Open your business profile"
-        >
-          <div className="user-avatar">{initials || "U"}</div>
+  type="button"
+  className="user-row"
+  onClick={() => onNavigate("My account")}
+  title="Open your account"
+>
+  <div className="user-avatar">{initials || "U"}</div>
 
-          <div className="user-info">
-            <b>{user.name}</b>
-            <small>{user.role}</small>
-          </div>
+  <div className="user-info">
+    <b>{displayName}</b>
+    <small>{user.email || "Account profile"}</small>
+  </div>
 
-          <ChevronRight className="profile-chevron" size={16} />
-        </button>
+  <ChevronRight className="profile-chevron" size={16} />
+</button>
       </div>
     </aside>
   );

@@ -1,3 +1,4 @@
+
 import {
   ArrowUpRight,
   Clock3,
@@ -7,8 +8,7 @@ import {
 import StatusBadge from "./StatusBadge.jsx";
 
 export default function TenderCard({ tender, onOpen }) {
-  const Icon =
-    tender.type === "Goods" ? Building2 : FileText;
+  const Icon = tender.type === "Goods" ? Building2 : FileText;
 
   return (
     <article className="tender-card">
@@ -19,30 +19,31 @@ export default function TenderCard({ tender, onOpen }) {
 
         <div className="tender-title">
           <h3>{tender.title}</h3>
-          <p>{tender.authority}</p>
+          <p>{tender.authority || tender.department || tender.source}</p>
         </div>
 
-        <StatusBadge status={tender.status} />
+        <StatusBadge status={tender.status || "Review"} />
       </div>
 
-      <p className="tender-description">
-        {tender.description}
-      </p>
+      <p className="tender-description">{tender.description}</p>
 
       <div className="tender-meta">
-        <span>{tender.category}</span>
-        <span>{tender.region}</span>
+        <span>{tender.category || "Unclassified"}</span>
+        <span>{tender.region || tender.state || "Not verified"}</span>
         <span>
           <Clock3 size={14} />
-          {tender.deadline}
+          {tender.deadline || "Deadline not verified"}
         </span>
-        <b>{tender.value}</b>
+        <b>{tender.value || "Value not disclosed"}</b>
       </div>
 
       <div className="tender-card-footer">
-        <span className="ref">REF: {tender.id}</span>
+        <span className="ref">
+          REF: {String(tender.id || tender.externalId || "N/A").slice(0, 16)}
+        </span>
 
         <button
+          type="button"
           className="button secondary small"
           onClick={() => onOpen(tender)}
         >
